@@ -20,17 +20,13 @@ class RawYoutubePlayer extends StatefulWidget {
   final void Function(YoutubeMetaData metaData)? onEnded;
 
   /// Creates a [RawYoutubePlayer] widget.
-  RawYoutubePlayer({
-    this.key,
-    this.onEnded,
-  });
+  RawYoutubePlayer({this.key, this.onEnded});
 
   @override
   _RawYoutubePlayerState createState() => _RawYoutubePlayerState();
 }
 
-class _RawYoutubePlayerState extends State<RawYoutubePlayer>
-    with WidgetsBindingObserver {
+class _RawYoutubePlayerState extends State<RawYoutubePlayer> with WidgetsBindingObserver {
   YoutubePlayerController? controller;
   PlayerState? _cachedPlayerState;
   bool _isPlayerReady = false;
@@ -39,12 +35,12 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -52,8 +48,7 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.resumed:
-        if (_cachedPlayerState != null &&
-            _cachedPlayerState == PlayerState.playing) {
+        if (_cachedPlayerState != null && _cachedPlayerState == PlayerState.playing) {
           controller?.play();
         }
         break;
@@ -102,18 +97,14 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
           ),
         ),
         onWebViewCreated: (webController) {
-          controller!.updateValue(
-            controller!.value.copyWith(webViewController: webController),
-          );
+          controller!.updateValue(controller!.value.copyWith(webViewController: webController));
           webController
             ..addJavaScriptHandler(
               handlerName: 'Ready',
               callback: (_) {
                 _isPlayerReady = true;
                 if (_onLoadStopCalled) {
-                  controller!.updateValue(
-                    controller!.value.copyWith(isReady: true),
-                  );
+                  controller!.updateValue(controller!.value.copyWith(isReady: true));
                 }
               },
             )
@@ -123,19 +114,12 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
                 switch (args.first as int) {
                   case -1:
                     controller!.updateValue(
-                      controller!.value.copyWith(
-                        playerState: PlayerState.unStarted,
-                        isLoaded: true,
-                      ),
+                      controller!.value.copyWith(playerState: PlayerState.unStarted, isLoaded: true),
                     );
                     break;
                   case 0:
                     widget.onEnded?.call(controller!.metadata);
-                    controller!.updateValue(
-                      controller!.value.copyWith(
-                        playerState: PlayerState.ended,
-                      ),
-                    );
+                    controller!.updateValue(controller!.value.copyWith(playerState: PlayerState.ended));
                     break;
                   case 1:
                     controller!.updateValue(
@@ -149,25 +133,14 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
                     break;
                   case 2:
                     controller!.updateValue(
-                      controller!.value.copyWith(
-                        playerState: PlayerState.paused,
-                        isPlaying: false,
-                      ),
+                      controller!.value.copyWith(playerState: PlayerState.paused, isPlaying: false),
                     );
                     break;
                   case 3:
-                    controller!.updateValue(
-                      controller!.value.copyWith(
-                        playerState: PlayerState.buffering,
-                      ),
-                    );
+                    controller!.updateValue(controller!.value.copyWith(playerState: PlayerState.buffering));
                     break;
                   case 5:
-                    controller!.updateValue(
-                      controller!.value.copyWith(
-                        playerState: PlayerState.cued,
-                      ),
-                    );
+                    controller!.updateValue(controller!.value.copyWith(playerState: PlayerState.cued));
                     break;
                   default:
                     throw Exception("Invalid player state obtained.");
@@ -177,36 +150,26 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
             ..addJavaScriptHandler(
               handlerName: 'PlaybackQualityChange',
               callback: (args) {
-                controller!.updateValue(
-                  controller!.value
-                      .copyWith(playbackQuality: args.first as String),
-                );
+                controller!.updateValue(controller!.value.copyWith(playbackQuality: args.first as String));
               },
             )
             ..addJavaScriptHandler(
               handlerName: 'PlaybackRateChange',
               callback: (args) {
                 final num rate = args.first;
-                controller!.updateValue(
-                  controller!.value.copyWith(playbackRate: rate.toDouble()),
-                );
+                controller!.updateValue(controller!.value.copyWith(playbackRate: rate.toDouble()));
               },
             )
             ..addJavaScriptHandler(
               handlerName: 'Errors',
               callback: (args) {
-                controller!.updateValue(
-                  controller!.value.copyWith(errorCode: args.first as int),
-                );
+                controller!.updateValue(controller!.value.copyWith(errorCode: args.first as int));
               },
             )
             ..addJavaScriptHandler(
               handlerName: 'VideoData',
               callback: (args) {
-                controller!.updateValue(
-                  controller!.value.copyWith(
-                      metaData: YoutubeMetaData.fromRawData(args.first)),
-                );
+                controller!.updateValue(controller!.value.copyWith(metaData: YoutubeMetaData.fromRawData(args.first)));
               },
             )
             ..addJavaScriptHandler(
@@ -226,9 +189,7 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
         onLoadStop: (_, __) {
           _onLoadStopCalled = true;
           if (_isPlayerReady) {
-            controller!.updateValue(
-              controller!.value.copyWith(isReady: true),
-            );
+            controller!.updateValue(controller!.value.copyWith(isReady: true));
           }
         },
       ),
@@ -389,7 +350,8 @@ class _RawYoutubePlayerState extends State<RawYoutubePlayer>
 
   String boolean({required bool value}) => value == true ? "'1'" : "'0'";
 
-  String get userAgent => controller!.flags.forceHD
-      ? 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
-      : '';
+  String get userAgent =>
+      controller!.flags.forceHD
+          ? 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'
+          : '';
 }
