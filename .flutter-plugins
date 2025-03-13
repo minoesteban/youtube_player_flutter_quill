@@ -1,2 +1,7 @@
 # This is a generated file; do not edit or check into version control.
-flutter_inappwebview_quill=/Users/nirmalkrishnakumar/.pub-cache/hosted/pub.dartlang.org/flutter_inappwebview_quill-5.4.6/
+flutter_inappwebview=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview-6.1.5/
+flutter_inappwebview_android=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview_android-1.1.3/
+flutter_inappwebview_ios=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview_ios-1.1.2/
+flutter_inappwebview_macos=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview_macos-1.1.2/
+flutter_inappwebview_web=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview_web-1.1.2/
+flutter_inappwebview_windows=/Users/esteban/.pub-cache/hosted/pub.dev/flutter_inappwebview_windows-0.6.0/

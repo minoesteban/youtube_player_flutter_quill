@@ -70,10 +70,7 @@ class TestApp extends StatelessWidget {
   final Widget child;
   final TextDirection textDirection;
 
-  TestApp({
-    this.textDirection = TextDirection.ltr,
-    required this.child,
-  });
+  TestApp({this.textDirection = TextDirection.ltr, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -85,20 +82,14 @@ class TestApp extends StatelessWidget {
       ],
       child: MediaQuery(
         data: MediaQueryData.fromWindow(window),
-        child: Directionality(
-          textDirection: textDirection,
-          child: child,
-        ),
+        child: Directionality(textDirection: textDirection, child: child),
       ),
     );
   }
 }
 
 R provideMockedNetworkImages<R>(R body()) {
-  return HttpOverrides.runZoned(
-    body,
-    createHttpClient: (_) => _createMockImageHttpClient(_, _transparentImage),
-  );
+  return HttpOverrides.runZoned(body, createHttpClient: (sc) => _createMockImageHttpClient(sc, _transparentImage));
 }
 
 class MockHttpClient extends Mock implements HttpClient {}
@@ -110,40 +101,27 @@ class MockHttpClientResponse extends Mock implements HttpClientResponse {}
 class MockHttpHeaders extends Mock implements HttpHeaders {}
 
 // Returns a mock HTTP client that responds with an image to all requests.
-MockHttpClient _createMockImageHttpClient(
-  SecurityContext? _,
-  List<int> imageBytes,
-) {
+MockHttpClient _createMockImageHttpClient(SecurityContext? _, List<int> imageBytes) {
   final client = MockHttpClient();
   final request = MockHttpClientRequest();
   final response = MockHttpClientResponse();
   final headers = MockHttpHeaders();
 
   registerFallbackValue(Uri());
-  when(() => client.getUrl(any<Uri>())).thenAnswer(
-    (_) => Future<HttpClientRequest>.value(request),
-  );
+  when(() => client.getUrl(any<Uri>())).thenAnswer((_) => Future<HttpClientRequest>.value(request));
   when(() => request.headers).thenReturn(headers);
-  when(request.close).thenAnswer(
-    (_) => Future<HttpClientResponse>.value(response),
-  );
+  when(request.close).thenAnswer((_) => Future<HttpClientResponse>.value(response));
   when(() => response.contentLength).thenReturn(_transparentImage.length);
   when(() => response.statusCode).thenReturn(HttpStatus.ok);
   when(() => response.listen(any())).thenAnswer((Invocation invocation) {
     final void Function(List<int>) onData = invocation.positionalArguments[0];
     final void Function() onDone = invocation.namedArguments[#onDone];
-    final void Function(
-      Object, [
-      StackTrace,
-    ]) onError = invocation.namedArguments[#onError];
+    final void Function(Object, [StackTrace]) onError = invocation.namedArguments[#onError];
     final bool cancelOnError = invocation.namedArguments[#cancelOnError];
 
-    return Stream<List<int>>.fromIterable(<List<int>>[imageBytes]).listen(
-      onData,
-      onDone: onDone,
-      onError: onError,
-      cancelOnError: cancelOnError,
-    );
+    return Stream<List<int>>.fromIterable(<List<int>>[
+      imageBytes,
+    ]).listen(onData, onDone: onDone, onError: onError, cancelOnError: cancelOnError);
   });
   return client;
 }

@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter_quill/youtube_player_flutter_quill.dart';
 
@@ -32,22 +31,20 @@ class YoutubePlayerBuilder extends StatefulWidget {
   _YoutubePlayerBuilderState createState() => _YoutubePlayerBuilderState();
 }
 
-class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
-    with WidgetsBindingObserver {
+class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder> with WidgetsBindingObserver {
   final GlobalKey playerKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
 
   @override
   void didChangeMetrics() {
@@ -82,9 +79,6 @@ class _YoutubePlayerBuilderState extends State<YoutubePlayerBuilder>
       ),
     );
     final child = widget.builder(context, _player);
-    return OrientationBuilder(
-      builder: (context, orientation) =>
-          orientation == Orientation.portrait ? child : _player,
-    );
+    return OrientationBuilder(builder: (context, orientation) => orientation == Orientation.portrait ? child : _player);
   }
 }

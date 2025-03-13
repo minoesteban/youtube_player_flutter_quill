@@ -1,7 +1,7 @@
 Flutter plugin for playing or streaming YouTube videos inline using the official [**iFrame Player API**](https://developers.google.com/youtube/iframe_api_reference).
 
 Supported Platforms:
-* **Android** 
+* **Android**
 * **iOS**
 
 For web support, use [youtube_player_iframe](https://pub.dev/packages/youtube_player_iframe). In future, this package will extend youtube_player_iframe.
@@ -18,5 +18,3 @@ For web support, use [youtube_player_iframe](https://pub.dev/packages/youtube_pl
 * Adapts to quality as per the bandwidth
 * Fast Forward and Rewind on horizontal drag
 * Fit Videos to wide screens with pinch gestures
-
-The plugin uses [flutter_inappwebview_quill](https://pub.dartlang.org/packages/flutter_inappwebview_quill) under-the-hood.
